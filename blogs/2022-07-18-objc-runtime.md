@@ -173,7 +173,7 @@ xcrun simctl install booted Debug-iphonesimulator/main.app
 
 Returning to our C++ example, you can notice how the verbosity of Objective-C became 3-fold in the C++ example. This is also a stringly-typed api, meaning if you type the selector wrong, the compiler won't catch it, and you'll be hit with a runtime exception. You can argue that Objective-C also will gladly let you write whatever selector you want, and still throw. However, with tooling like XCode, this would be caught. You can even compile your code with `-Wno-objc-method-access` to catch such problems in Objective-C at compile time.
 
-We'll now move to Rust, which is a relatively younger programming language. It's not an Apple officially-supported language, however, it has better crossplatform support than for example Swift. And more importantly, it can target Apple's ObjcC runtime. To do that, we'll use the [objc crate](https://github.com/SSheldon/rust-objc), which offers some convenient wrappers around the runtime functions:
+We'll now move to Rust, which is a relatively younger programming language. It's not an Apple officially-supported language, however, it has much better crossplatform support than for example Swift. And more importantly, it can target Apple's ObjcC runtime. To do that, we'll use the [objc crate](https://github.com/SSheldon/rust-objc), which offers some convenient wrappers around the runtime functions:
 ```rust
 extern crate objc; // remember to add it to your Cargo.toml!
 
