@@ -2,7 +2,7 @@
 
 I recently released a proof-of-concept [library](https://github.com/MoAlyousef/floui) wrapping several native widgets on Android and iOS. It's written in C++, and I've also released [Rust bindings](https://github.com/MoAlyousef/floui-rs) to it. In my post on the Rust subreddit announcing the release, a fellow redditor remarked "I'm a little surprised you wrapped a floui-rs around the Floui C++ project rather than just writing rust and calling into objc or the jni". I wasn't satisfied with my succinct answer, but I thought a Reddit reply wouldn't provide enough context to many reading it. So I decided to write this post. Just a note before diving in, floui's iOS code implementation is in Objective-C++ and requires a `#define FLOUI_IMPL` macro in at least one Objective-C++ source file, the rest of the gui code can be written in cpp files or .mm files since the interface is in C++. Regarding the JNI part, it's equally painful to write in C++ or Rust. 
 
-Most Apple frameworks expose an Objective-C api, except for some which expose a C++ (DriverKit) or a Swift api (StoreKit2). That means that Objective-C is Apple's system's language par excellence, and other languages will need to be able to interface with it for any functionality provided by Apple in its frameworks.
+Most Apple frameworks expose an Objective-C api, except for some which expose a C++ (DriverKit) or a Swift api (StoreKit2). That means that Objective-C is Apple's system's language par excellence, and other languages will need to be able to interface with it for any functionality provided by Apple in its frameworks. Interfacing with Objective-C isn't straightforward, and apart from Swift, no other language can directly interface with it. Luckily, the objc runtime offers C functions which allow other languages to interface with Objective-C frameworks. And any language that can call C, can -via the objc runtime- interface with Objective-C.
 
 In this post, I'll show how this can be done using C++ and Rust. The C++ version can be modified to C by just replacing `auto` with a concrete type.
 
@@ -56,7 +56,7 @@ int main(int argc, char *argv[]) {
     return UIApplicationMain(argc, argv, nil, appDelegateClassName);
 }
 ```
-Simple enough, creates a view with a button which prints to the console when clicked. Note that Objective-C can seamlessly incorporate C++ code. That's technically a different language, called Objective-C++, and it requires changing the file extension from .m to .mm. Generally Objective-C++ is less verbose than Objective-C since it can benefit from modern C++ features like type inference:
+Simple enough, creates a view with a button which prints to the console when clicked. Note that Objective-C can seamlessly incorporate C++ code into what's called Objective-C++, and it requires changing the file extension from .m to .mm. This already speaks volumes about the flexibility and extendibility of Objective-C. Generally I find Objective-C++ is less verbose than Objective-C since it can benefit from modern C++ features like type inference:
 ```cpp
 UISomeBespokenlyLongTypeName *t = [UISomeBespokenlyLongTypeName new];
 // becomes
